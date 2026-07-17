@@ -1,8 +1,28 @@
 # Veritas: AI-Powered Media Forensic Authentication Platform
 
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&pause=1000&color=00F0FF&center=true&vCenter=true&width=600&height=50&lines=VERITAS+FORENSIC+PLATFORM;AI-POWERED+MEDIA+AUTHENTICATOR;MUTATION+%26+DEEP-FAKE+DETECTION;LEDGER-BACKED+VERIFICATION" alt="Typing SVG" />
+</p>
+
 **Veritas** is a state-of-the-art secure media forensic ledger designed to detect and log digital media manipulations, deep-fakes, and coordinate audits. Built using Next.js 16, React 19, Tailwind CSS 4, and Prisma, Veritas delivers a premium cyberpunk-themed aesthetic integrated with rich AI-powered analyses.
 
 Developed by **Sonia Gupta** as a full-stack technical assessment.
+
+---
+
+## 📸 Interface Previews
+
+### 1. Cyberpunk Forensic Submission Console
+An analytical screen providing real-time local file hash computation, sliders to represent spectrum anomalies, and triggers for AI verification.
+![Forensic Analysis Dashboard](public/screenshot_analysis.png)
+
+### 2. Forensic Authentication Ledger
+A cryptographically verifiable record indexing verified and revoked items.
+![Ledger Portal](public/screenshot_dashboard.png)
+
+### 3. Portal Gateway (Login)
+Role-based administrative entry node with pre-filled test keys.
+![Login Access Node](public/screenshot_login.png)
 
 ---
 

@@ -18,9 +18,7 @@ export async function generateForensicReport(data: VerificationMetrics): Promise
     return simulateForensicReport(data);
   }
 
-  try {
-    const ai = new GoogleGenAI({ apiKey });
-    const prompt = `You are a Senior Media Forensics AI auditor integrated into Veritas, an advanced deepfake and media manipulation detection hub.
+  const prompt = `You are a Senior Media Forensics AI auditor integrated into Veritas, an advanced deepfake and media manipulation detection hub.
 Analyze the following media files extracted metadata and forensic indicators to generate a structured forensic audit report.
 
 FILE METADATA:
@@ -44,16 +42,27 @@ Generate a comprehensive, professional forensic report and summary. Include:
 
 Keep your response format clean, authoritative, and direct. Use markdown.`;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-3.5-flash',
-      contents: prompt,
-    });
+  // Fallback chain to handle transient capacity (503) or rate limits
+  const models = ['gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3.1-pro'];
 
-    return response.text || "Failed to generate AI contents.";
-  } catch (error) {
-    console.error("Gemini API call failed, falling back to simulated report:", error);
-    return simulateForensicReport(data);
+  for (const modelName of models) {
+    try {
+      const ai = new GoogleGenAI({ apiKey });
+      const response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+      });
+
+      if (response.text) {
+        return response.text;
+      }
+    } catch (error) {
+      console.warn(`Gemini model ${modelName} returned error or was overloaded:`, error);
+    }
   }
+
+  console.error("All Gemini API models failed, falling back to simulated report.");
+  return simulateForensicReport(data);
 }
 
 function simulateForensicReport(data: VerificationMetrics): string {

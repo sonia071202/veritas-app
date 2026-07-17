@@ -45,7 +45,7 @@ Generate a comprehensive, professional forensic report and summary. Include:
 Keep your response format clean, authoritative, and direct. Use markdown.`;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.5-flash',
       contents: prompt,
     });
 

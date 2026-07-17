@@ -1,0 +1,54 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  role         String        // "ADMIN", "ANALYST", "AUDITOR"
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  reports      MediaReport[]
+  auditLogs    AuditLog[]
+}
+
+model MediaReport {
+  hash               String   @id // Client-computed or server-computed SHA-256 hash
+  fileName           String
+  fileSize           Int
+  mimeType           String
+  registration       DateTime @default(now())
+  analystId          String
+  analyst            User     @relation(fields: [analystId], references: [id])
+  
+  // Forensic validation metrics (0 - 100 indicator scales)
+  audioJitter        Float
+  visualAnomalies    Float
+  metadataStatus     String   // e.g. "CLEAN", "MODIFIED", "SUSPICIOUS"
+  compressionProfile String   // e.g. "STANDARD", "RECOMPRESSED", "UNKNOWN"
+  
+  // Verdict
+  confidence         Float    // 0 to 100 score (higher indicates more likely authentic)
+  status             String   // "VERIFIED", "SUSPICIOUS", "REVOKED"
+  aiReport           String   // Gemini analysis synthesis / log analysis
+  
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String   // "USER_LOGIN", "REPORT_CREATE", "REPORT_REVOKE", "REPORT_DELETE"
+  details   String
+  ipAddress String?
+  timestamp DateTime @default(now())
+}
